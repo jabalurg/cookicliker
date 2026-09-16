@@ -54,6 +54,10 @@ const elements = {
   cpc: document.querySelector("#cookies-per-click"),
   cookieButton: document.querySelector("#cookie-button"),
   floaters: document.querySelector("#floaters"),
+  jumpButton: document.querySelector("#jump-button"),
+  jumpStage: document.querySelector(".jump-stage"),
+  jumpStreak: document.querySelector("#jump-streak"),
+  jumper: document.querySelector("#jumper"),
   upgradeList: document.querySelector("#upgrade-list"),
   resetButton: document.querySelector("#reset-button")
 };
@@ -61,11 +65,13 @@ const elements = {
 const defaultState = {
   cookies: 0,
   totalBaked: 0,
+  jumpStreak: 0,
   owned: Object.fromEntries(upgrades.map((upgrade) => [upgrade.id, 0]))
 };
 
 let state = loadState();
 let lastTick = performance.now();
+let isJumping = false;
 
 function loadState() {
   try {
@@ -77,6 +83,7 @@ function loadState() {
     return {
       cookies: Number(saved.cookies) || 0,
       totalBaked: Number(saved.totalBaked) || 0,
+      jumpStreak: Number(saved.jumpStreak) || 0,
       owned: { ...defaultState.owned, ...(saved.owned || {}) }
     };
   } catch {
@@ -139,6 +146,7 @@ function renderStats() {
   elements.cookieCount.textContent = formatNumber(Math.floor(state.cookies));
   elements.cps.textContent = formatNumber(cookiesPerSecond());
   elements.cpc.textContent = formatNumber(cookiesPerClick());
+  elements.jumpStreak.textContent = `Серия: ${state.jumpStreak}`;
 }
 
 function render() {
@@ -174,12 +182,66 @@ function showFloater(amount, event) {
   floater.addEventListener("animationend", () => floater.remove(), { once: true });
 }
 
+function showStageFloater(amount) {
+  const rect = elements.floaters.getBoundingClientRect();
+  const stageRect = elements.jumpStage.getBoundingClientRect();
+  const floater = document.createElement("span");
+  floater.className = "floater";
+  floater.textContent = `Прыжок +${formatNumber(amount)}`;
+  floater.style.setProperty("--x", `${stageRect.left + stageRect.width / 2 - rect.left - 48}px`);
+  floater.style.setProperty("--y", `${stageRect.top + 30 - rect.top}px`);
+  elements.floaters.append(floater);
+  floater.addEventListener("animationend", () => floater.remove(), { once: true });
+}
+
+function jump() {
+  if (isJumping) {
+    return;
+  }
+
+  isJumping = true;
+  state.jumpStreak += 1;
+
+  const streakBonus = Math.min(state.jumpStreak, 25);
+  const amount = Math.max(5, Math.floor(cookiesPerClick() * 3 + streakBonus));
+  bake(amount);
+  showStageFloater(amount);
+
+  elements.jumpButton.disabled = true;
+  elements.jumper.classList.add("jumping");
+  elements.jumpStage.classList.add("active");
+  saveState();
+  render();
+
+  window.setTimeout(() => {
+    elements.jumper.classList.remove("jumping");
+    elements.jumpStage.classList.remove("active");
+    elements.jumpButton.disabled = false;
+    isJumping = false;
+  }, 540);
+}
+
 elements.cookieButton.addEventListener("click", (event) => {
   const amount = cookiesPerClick();
   bake(amount);
   showFloater(amount, event);
   saveState();
   render();
+});
+
+elements.jumpButton.addEventListener("click", jump);
+
+window.addEventListener("keydown", (event) => {
+  if (event.code !== "Space" && event.code !== "ArrowUp") {
+    return;
+  }
+
+  if (event.target instanceof HTMLButtonElement) {
+    return;
+  }
+
+  event.preventDefault();
+  jump();
 });
 
 elements.resetButton.addEventListener("click", () => {
@@ -189,6 +251,7 @@ elements.resetButton.addEventListener("click", () => {
   }
 
   state = structuredClone(defaultState);
+  isJumping = false;
   saveState();
   render();
 });
