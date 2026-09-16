@@ -3,46 +3,35 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cookie Clicker</title>
+    <title>Jump Runner</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="game-shell">
       <section class="counter-panel" aria-labelledby="game-title">
         <div>
-          <p class="eyebrow">Cookie factory</p>
-          <h1 id="game-title">Cookie Clicker</h1>
+          <p class="eyebrow">Jump game</p>
+          <h1 id="game-title">Jump Runner</h1>
         </div>
 
         <div class="score-grid" aria-live="polite">
           <div>
-            <span class="label">Печенья</span>
-            <strong id="cookie-count">0</strong>
+            <span class="label">Очки</span>
+            <strong id="score-count">0</strong>
           </div>
           <div>
-            <span class="label">В секунду</span>
-            <strong id="cookies-per-second">0</strong>
+            <span class="label">Лучшая серия</span>
+            <strong id="best-streak">0</strong>
           </div>
           <div>
-            <span class="label">За клик</span>
-            <strong id="cookies-per-click">1</strong>
+            <span class="label">За прыжок</span>
+            <strong id="jump-reward">+10</strong>
           </div>
         </div>
       </section>
 
-      <section class="click-zone" aria-label="Главная зона клика">
-        <button id="cookie-button" class="cookie-button" type="button" aria-label="Испечь печенье">
-          <span class="cookie">
-            <span class="chip chip-one"></span>
-            <span class="chip chip-two"></span>
-            <span class="chip chip-three"></span>
-            <span class="chip chip-four"></span>
-            <span class="chip chip-five"></span>
-            <span class="bite"></span>
-          </span>
-        </button>
-
-        <div class="jump-stage" aria-label="Мини-игра с прыжками">
+      <section class="jump-zone" aria-label="Игра с прыжками">
+        <div class="jump-stage" aria-label="Дорожка для прыжков">
           <div class="stage-sky" aria-hidden="true">
             <span class="cloud cloud-left"></span>
             <span class="cloud cloud-right"></span>
@@ -68,15 +57,11 @@
         <div id="floaters" class="floaters" aria-hidden="true"></div>
       </section>
 
-      <aside class="shop-panel" aria-labelledby="shop-title">
-        <div class="shop-header">
-          <div>
-            <p class="eyebrow">Магазин</p>
-            <h2 id="shop-title">Улучшения</h2>
-          </div>
-          <button id="reset-button" class="icon-button" type="button" title="Сбросить игру" aria-label="Сбросить игру">↺</button>
-        </div>
-        <div id="upgrade-list" class="upgrade-list"></div>
+      <aside class="controls-panel" aria-label="Управление">
+        <p class="eyebrow">Управление</p>
+        <h2>Прыгай и набирай серию</h2>
+        <p class="control-copy">Нажимай кнопку, Space или ArrowUp. Чем длиннее серия, тем больше очков за прыжок.</p>
+        <button id="reset-button" class="reset-button" type="button">Сбросить прогресс</button>
       </aside>
     </main>
 
