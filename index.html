@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cookie Clicker</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="counter-panel" aria-labelledby="game-title">
+        <div>
+          <p class="eyebrow">Cookie factory</p>
+          <h1 id="game-title">Cookie Clicker</h1>
+        </div>
+
+        <div class="score-grid" aria-live="polite">
+          <div>
+            <span class="label">Печенья</span>
+            <strong id="cookie-count">0</strong>
+          </div>
+          <div>
+            <span class="label">В секунду</span>
+            <strong id="cookies-per-second">0</strong>
+          </div>
+          <div>
+            <span class="label">За клик</span>
+            <strong id="cookies-per-click">1</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="click-zone" aria-label="Главная зона клика">
+        <button id="cookie-button" class="cookie-button" type="button" aria-label="Испечь печенье">
+          <span class="cookie">
+            <span class="chip chip-one"></span>
+            <span class="chip chip-two"></span>
+            <span class="chip chip-three"></span>
+            <span class="chip chip-four"></span>
+            <span class="chip chip-five"></span>
+            <span class="bite"></span>
+          </span>
+        </button>
+        <div id="floaters" class="floaters" aria-hidden="true"></div>
+      </section>
+
+      <aside class="shop-panel" aria-labelledby="shop-title">
+        <div class="shop-header">
+          <div>
+            <p class="eyebrow">Магазин</p>
+            <h2 id="shop-title">Улучшения</h2>
+          </div>
+          <button id="reset-button" class="icon-button" type="button" title="Сбросить игру" aria-label="Сбросить игру">↺</button>
+        </div>
+        <div id="upgrade-list" class="upgrade-list"></div>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
